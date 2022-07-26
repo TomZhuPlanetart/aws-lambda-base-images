@@ -15,4 +15,15 @@ ENV LAMBDA_RUNTIME_DIR=/var/runtime
 
 WORKDIR /var/task
 
-ENTRYPOINT ["/lambda-entrypoint.sh"]
+RUN curl https://intoli.com/install-google-chrome.sh | bash
+
+Add ./src/package.json /var/task/
+ADD ./src/package-lock.json /var/task/
+
+RUN ls -al
+
+RUN cd /var/task && npm install
+
+ADD ./src/*.js /var/task/
+
+ENTRYPOINT ["/lambda-entrypoint.sh", "index.handler"]
